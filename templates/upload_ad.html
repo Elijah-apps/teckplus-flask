@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Ads</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-title {
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .ad-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .upload-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .upload-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Upload Ads Form -->
+    <div class="container">
+        <div class="form-container">
+            <div class="form-title">Upload Your Advertisement</div>
+            <form action="#" method="POST" enctype="multipart/form-data">
+                <!-- Ad Type Selection -->
+                <div class="form-group">
+                    <label for="adType">Ad Type</label>
+                    <select class="form-control" id="adType" name="adType" required>
+                        <option value="" disabled selected>Select Ad Type</option>
+                        <option value="video">Video Ad</option>
+                        <option value="image">Image/Banner Ad</option>
+                    </select>
+                </div>
+
+                <!-- Video File Upload -->
+                <div class="form-group" id="videoFileGroup" style="display: none;">
+                    <label for="adVideo">Upload Video Ad</label>
+                    <input type="file" class="form-control" id="adVideo" name="adVideo" accept="video/*">
+                </div>
+
+                <!-- Image File Upload -->
+                <div class="form-group" id="imageFileGroup" style="display: none;">
+                    <label for="adImage">Upload Image Ad (Banner)</label>
+                    <input type="file" class="form-control" id="adImage" name="adImage" accept="image/*">
+                    <img id="imagePreview" class="ad-preview" style="display: none;" />
+                </div>
+
+                <!-- Ad Title -->
+                <div class="form-group">
+                    <label for="adTitle">Ad Title</label>
+                    <input type="text" class="form-control" id="adTitle" name="adTitle" placeholder="Enter ad title" required>
+                </div>
+
+                <!-- Ad Description -->
+                <div class="form-group">
+                    <label for="adDescription">Ad Description</label>
+                    <textarea class="form-control" id="adDescription" name="adDescription" rows="3" placeholder="Enter ad description" required></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn upload-btn btn-block">Upload Ad</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Show the appropriate upload field based on the selected ad type
+        document.getElementById('adType').addEventListener('change', function() {
+            const videoGroup = document.getElementById('videoFileGroup');
+            const imageGroup = document.getElementById('imageFileGroup');
+
+            if (this.value === 'video') {
+                videoGroup.style.display = 'block';
+                imageGroup.style.display = 'none';
+            } else if (this.value === 'image') {
+                videoGroup.style.display = 'none';
+                imageGroup.style.display = 'block';
+            }
+        });
+
+        // Preview Image Ad
+        document.getElementById('adImage').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const image = document.getElementById('imagePreview');
+                image.src = event.target.result;
+                image.style.display = 'block';
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
