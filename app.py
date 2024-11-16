@@ -140,13 +140,6 @@ def view_ads():
 
 
 
-
-
-
-
-
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
