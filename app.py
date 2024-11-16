@@ -3,6 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 import os
+from datetime import datetime
+import random
+from flask import jsonify
+
+ from werkzeug.utils import secure_filename
+
+
+
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -23,7 +31,11 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default="user")  # user, tutor, creator
     wallet_balance = db.Column(db.Float, default=0.0)
-    
+    # Relationships
+    ads = db.relationship('Ad', back_populates='user', lazy=True)
+    interactions = db.relationship('AdInteraction', back_populates='user', lazy=True)
+
+
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -270,29 +282,54 @@ def settings():
     return render_template("settings.html", user=current_user)
 
 
-
 @app.route("/upload-ad", methods=["GET", "POST"])
 @login_required
 def upload_ad():
     if current_user.role != "admin":
         flash("Only admins can upload ads!", "danger")
         return redirect(url_for("home"))
+    
     if request.method == "POST":
+        # Check for missing fields
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+        image_file = request.files.get("image")
+
+        if not title or not description:
+            flash("Title and description are required!", "danger")
+            return render_template("upload_ad.html")
+        
+        # Process uploaded image file
+        media_url = None
+        if image_file:
+            if allowed_file(image_file.filename):
+                filename = secure_filename(image_file.filename)
+                media_url = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+                image_file.save(media_url)
+            else:
+                flash("Invalid file type. Please upload an image.", "danger")
+                return render_template("upload_ad.html")
+
+        # Save ad to the database
         new_ad = Ad(
-            title=request.form["title"],
-            description=request.form["description"],
-            image_url=request.files["image"].filename if "image" in request.files else None,
+            title=title,
+            description=description,
+            media_url=filename if media_url else None,
+            media_type="image",
             user_id=current_user.id,
         )
-        if new_ad.image_url:
-            request.files["image"].save(os.path.join(app.config["UPLOAD_FOLDER"], new_ad.image_url))
         db.session.add(new_ad)
         db.session.commit()
         flash("Ad uploaded successfully!", "success")
+        return redirect(url_for("home"))
+
     return render_template("upload_ad.html")
 
-
-
+def allowed_file(filename):
+    """Validate uploaded file type."""
+    allowed_extensions = {"png", "jpg", "jpeg", "gif"}
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in allowed_extensions
 
 
 @app.route("/login", methods=["GET", "POST"])
