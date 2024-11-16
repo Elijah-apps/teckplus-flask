@@ -86,7 +86,86 @@ def load_user(user_id):
 def home():
     courses = Course.query.all()
     contents = Content.query.all()
-    return render_template("home.html", courses=courses, contents=contents, user=current_user)
+    return render_template("index.html", courses=courses, contents=contents, user=current_user)
+
+
+
+
+
+@app.route("/benefit")
+def benefit():
+    return render_template("benefit.html", user=current_user)
+
+
+
+
+
+@app.route('/api/recharge/airtime', methods=['POST'])
+def recharge_airtime():
+    data = request.get_json()
+    
+    phone_number = data.get('phone')
+    network = data.get('network')
+    amount = data.get('amount')
+    
+    # Basic validation for the incoming data
+    if not phone_number or not network or not amount:
+        return jsonify({'success': False, 'message': 'Invalid data. Please provide all required fields.'}), 400
+    
+    if not isinstance(amount, (int, float)) or amount <= 0:
+        return jsonify({'success': False, 'message': 'Invalid amount.'}), 400
+    
+    # Simulating Airtime Recharge Logic (In real-world, you would integrate with a payment gateway)
+    success = random.choice([True, False])  # Simulating success or failure randomly
+    
+    if success:
+        return jsonify({'success': True, 'message': 'Airtime recharge successful!'})
+    else:
+        return jsonify({'success': False, 'message': 'Airtime recharge failed. Please try again later.'}), 500
+
+# Simple route for Data Recharge
+@app.route('/api/recharge/data', methods=['POST'])
+def recharge_data():
+    data = request.get_json()
+    
+    phone_number = data.get('phone')
+    network = data.get('network')
+    plan = data.get('plan')
+    
+    # Basic validation for the incoming data
+    if not phone_number or not network or not plan:
+        return jsonify({'success': False, 'message': 'Invalid data. Please provide all required fields.'}), 400
+    
+    # Simulating Data Plan Recharge Logic (In real-world, you would integrate with a data provider)
+    success = random.choice([True, False])  # Simulating success or failure randomly
+    
+    if success:
+        return jsonify({'success': True, 'message': 'Data plan recharge successful!'})
+    else:
+        return jsonify({'success': False, 'message': 'Data plan recharge failed. Please try again later.'}), 500
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route("/")
+def home():
+    courses = Course.query.all()
+    contents = Content.query.all()
+    return render_template("index.html", courses=courses, contents=contents, user=current_user)
+
+
+
 
 
 @app.route("/ads/click/<int:ad_id>", methods=["POST"])

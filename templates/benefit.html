@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefit Page</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Notiflix -->
+    <script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.0/dist/notiflix-3.2.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+        }
+        .tab-content {
+            margin-top: 30px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .transaction-history {
+            margin-top: 30px;
+        }
+        .transaction-history table {
+            width: 100%;
+        }
+        .transaction-history td, .transaction-history th {
+            padding: 12px;
+            text-align: center;
+        }
+        .transaction-history th {
+            background-color: #f8f9fa;
+        }
+        .btn-buy {
+            width: 100%;
+        }
+        .network-selection {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">Buy Airtime or Data Plan</h2>
+        
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="airtime-tab" data-bs-toggle="tab" href="#airtime" role="tab" aria-controls="airtime" aria-selected="true">Airtime</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="data-tab" data-bs-toggle="tab" href="#data" role="tab" aria-controls="data" aria-selected="false">Data Plans</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="history-tab" data-bs-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">Transaction History</a>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Airtime Tab -->
+            <div class="tab-pane fade show active" id="airtime" role="tabpanel" aria-labelledby="airtime-tab">
+                <h4 class="text-center">Buy Airtime</h4>
+                <div class="form-section">
+                    <!-- Phone Number Input -->
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <!-- Network Selection -->
+                    <div class="network-selection">
+                        <label for="networkSelect" class="form-label">Select Network</label>
+                        <select class="form-select" id="networkSelect" required>
+                            <option value="">Select Network</option>
+                            <option value="MTN">MTN</option>
+                            <option value="Airtel">Airtel</option>
+                            <option value="Glo">Glo</option>
+                            <option value="9Mobile">9Mobile</option>
+                        </select>
+                    </div>
+
+                    <!-- Airtime Amount -->
+                    <input type="number" class="form-control" id="airtimeAmount" placeholder="Enter Airtime Amount" min="1" required />
+
+                    <button class="btn btn-primary btn-buy mt-3" id="buyAirtimeButton">Buy Airtime</button>
+                </div>
+            </div>
+
+            <!-- Data Plan Tab -->
+            <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                <h4 class="text-center">Buy Data Plan</h4>
+                <div class="form-section">
+                    <!-- Phone Number Input -->
+                    <div class="mb-3">
+                        <label for="dataPhoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="dataPhoneNumber" placeholder="Enter your phone number" required>
+                    </div>
+
+                    <!-- Network Selection -->
+                    <div class="network-selection">
+                        <label for="dataNetworkSelect" class="form-label">Select Network</label>
+                        <select class="form-select" id="dataNetworkSelect" required>
+                            <option value="">Select Network</option>
+                            <option value="MTN">MTN</option>
+                            <option value="Airtel">Airtel</option>
+                            <option value="Glo">Glo</option>
+                            <option value="9Mobile">9Mobile</option>
+                        </select>
+                    </div>
+
+                    <!-- Data Plan Selection -->
+                    <select class="form-select" id="dataPlanSelect" required>
+                        <option value="1GB">1GB - $5</option>
+                        <option value="5GB">5GB - $20</option>
+                        <option value="10GB">10GB - $35</option>
+                    </select>
+
+                    <button class="btn btn-success btn-buy mt-3" id="buyDataButton">Buy Data Plan</button>
+                </div>
+            </div>
+
+            <!-- Transaction History Tab -->
+            <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <h4 class="text-center">Transaction History</h4>
+                <div class="transaction-history">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionList">
+                            <!-- Transaction entries will appear here dynamically -->
+                            <tr>
+                                <td>#001</td>
+                                <td>$5.00</td>
+                                <td>Airtime</td>
+                                <td>Completed</td>
+                            </tr>
+                            <tr>
+                                <td>#002</td>
+                                <td>$20.00</td>
+                                <td>Data Plan</td>
+                                <td>Completed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Handle Airtime Purchase
+        const buyAirtimeButton = document.getElementById("buyAirtimeButton");
+        const airtimeAmount = document.getElementById("airtimeAmount");
+        const phoneNumber = document.getElementById("phoneNumber");
+        const networkSelect = document.getElementById("networkSelect");
+
+        buyAirtimeButton.addEventListener("click", () => {
+            const amount = parseFloat(airtimeAmount.value);
+            const phone = phoneNumber.value;
+            const network = networkSelect.value;
+
+            if (!phone || !network || isNaN(amount) || amount <= 0) {
+                Notiflix.Notify.Failure('Please enter valid information.');
+                return;
+            }
+
+            // Send POST request for Airtime recharge
+            const requestData = { phone, network, amount };
+            fetch('/api/recharge/airtime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Notiflix.Notify.Success('Airtime recharge successful!');
+                    updateTransactionHistory("Airtime", amount, "Completed");
+                } else {
+                    Notiflix.Notify.Failure('Airtime recharge failed. Try again later.');
+                }
+            })
+            .catch(error => {
+                Notiflix.Notify.Failure('Network error. Please try again later.');
+            });
+        });
+
+        // Handle Data Plan Purchase
+        const buyDataButton = document.getElementById("buyDataButton");
+        const dataPlanSelect = document.getElementById("dataPlanSelect");
+        const dataPhoneNumber = document.getElementById("dataPhoneNumber");
+        const dataNetworkSelect = document.getElementById("dataNetworkSelect");
+
+        buyDataButton.addEventListener("click", () => {
+            const phone = dataPhoneNumber.value;
+            const network = dataNetworkSelect.value;
+            const plan = dataPlanSelect.value;
+
+            if (!phone || !network || !plan) {
+                Notiflix.Notify.Failure('Please select valid data plan details.');
+                return;
+            }
+
+            // Send POST request for Data Plan recharge
+            const requestData = { phone, network, plan };
+            fetch('/api/recharge/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Notiflix.Notify.Success('Data plan purchase successful!');
+                    updateTransactionHistory("Data Plan", plan, "Completed");
+                } else {
+                    Notiflix.Notify.Failure('Data plan purchase failed. Try again later.');
+                }
+            })
+            .catch(error => {
+                Notiflix.Notify.Failure('Network error. Please try again later.');
+            });
+        });
+
+        // Update transaction history
+        function updateTransactionHistory(type, amount, status) {
+            const transactionList = document.getElementById("transactionList");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>#${Math.random().toString(36).substr(2, 5).toUpperCase()}</td>
+                <td>$${amount}</td>
+                <td>${type}</td>
+                <td>${status}</td>
+            `;
+            transactionList.appendChild(newRow);
+        }
+    </script>
+</body>
+</html>
