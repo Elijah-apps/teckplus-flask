@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(20), default="user")  # user, tutor, creator
     wallet_balance = db.Column(db.Float, default=0.0)
+    
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,6 +70,22 @@ class Ad(db.Model):
     
     interactions = db.relationship('AdInteraction', back_populates="ad")
     user = db.relationship('User', back_populates="ads")
+
+
+
+class eBook(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    file_path = db.Column(db.String(200), nullable=False)
+    read_times = db.relationship('ReadTime', backref='ebook', lazy=True)
+
+    def __repr__(self):
+        return f'<eBook {self.title}>'
+
+
+
+
 
 
 class ContentView(db.Model):
