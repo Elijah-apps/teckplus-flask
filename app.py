@@ -67,7 +67,6 @@ class AdInteraction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     interaction_type = db.Column(db.String(50), nullable=False)  # View, Click, etc.
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    
     ad = db.relationship('Ad', back_populates="interactions")
     user = db.relationship('User', back_populates="interactions")
 
